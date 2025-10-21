@@ -1,0 +1,17 @@
+Added the following 3 lines to the end of Pis /Boot/firmware/config.txt file:
+  dtparam=audio=on
+  audio_pwm_mode=2
+  dtoverlay=audremap,pins_12_13
+
+Enable everything! (I2C, SPI, Serial)
+
+Create the following file as /lib/systemd/system/SkullOS.service 
+
+  [Unit]
+  Description=SkullOS
+
+  [Service]
+  ExecStart=/home/david/Dev/AbominableIntellect/ProofOfConcept/bin/python3 /home/david/Dev/AbominableIntellect/ProofOfConcept/src/SimpleStaffOS/Core.py
+
+  [Install]
+  WantedBy=multi-user.target
