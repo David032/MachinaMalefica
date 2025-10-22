@@ -152,7 +152,7 @@ while True:
     if actionButton.value is False:
         print("Action Button pressed") # replace with log
         buttonLed.value = True
-        ledRing.fill((255, 0, 0))
+        ledRing.fill((255, 0, 0,0))
         ledRing.show()
         if audioSystem:
             takeImageSound.play()
@@ -161,7 +161,7 @@ while True:
         update_element(messageText, messageElement, 0, 16)
         time.sleep(0.25)  # Debounce delay
         buttonLed.value = False
-        ledRing.fill((0, 0, 0))
+        ledRing.fill((0, 0, 0,0))
         ledRing.show()
     if secondButton.value is False:
         print("Second Button pressed") # replace with log
