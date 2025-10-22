@@ -34,7 +34,7 @@ ledRing = neopixel.NeoPixel(board.D10,7, brightness=0.2, pixel_order=neopixel.GR
 try:
     fuelGauge = adafruit_max1704x.MAX17048(i2c)
 except:
-    fuelGaugeActive = False
+    fuelGauge = False
 
 try:
     ss = Seesaw(i2c)
@@ -139,7 +139,7 @@ while True:
     timestamp = time.strftime('%H:%M')
     update_element(timestamp, timeElement, 0, 0)
     # Update Staff battery
-    if fuelGaugeActive:
+    if fuelGauge:
         staffText = fuelGauge.cell_percent_remaining.__str__() + "%"
     else:
         staffText = "N/A"
