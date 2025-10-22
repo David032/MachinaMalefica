@@ -126,8 +126,8 @@ def update_element(text, element, xPos, yPos):
     element.text((xPos, yPos), messageText, font=font, fill=255,)
 
 #Start the timelapse
-timelapseCommand = 'rpicam-still -t 28800000 -o StaffOS/timelapse%d.jpg 60000'
-subprocess.Popen(timelapseCommand, shell=True)
+# timelapseCommand = 'rpicam-still -t 28800000 -o StaffOS/timelapse%d.jpg 60000'
+# subprocess.Popen(timelapseCommand, shell=True)
 
 while True:
     # Clear image buffer
