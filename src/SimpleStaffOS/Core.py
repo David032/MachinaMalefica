@@ -13,6 +13,7 @@ from pathlib import Path
 import subprocess
 import os
 from pygame import mixer
+import adafruit_max1704x
 
 #region Setup audio
 try:
@@ -29,7 +30,11 @@ with open(pathToSettings) as settings_data:
 
 i2c = I2CEnhanced(1) 
 oled = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
-ledRing = neopixel.NeoPixel(board.D10,7, brightness=0.2)
+ledRing = neopixel.NeoPixel(board.D10,7, brightness=0.2, pixel_order=neopixel.GRBW)
+try:
+    fuelGauge = adafruit_max1704x.MAX17048(i2c)
+except:
+    fuelGaugeActive = False
 
 try:
     ss = Seesaw(i2c)
@@ -120,6 +125,10 @@ def update_element(text, element, xPos, yPos):
     messageText = text
     element.text((xPos, yPos), messageText, font=font, fill=255,)
 
+#Start the timelapse
+timelapseCommand = 'rpicam-still -t 28800000 -o StaffOS/timelapse%d.jpg 60000'
+subprocess.Popen(timelapseCommand, shell=True)
+
 while True:
     # Clear image buffer
     oled.fill(0)
@@ -130,7 +139,10 @@ while True:
     timestamp = time.strftime('%H:%M')
     update_element(timestamp, timeElement, 0, 0)
     # Update Staff battery
-    staffText = "85%"
+    if fuelGaugeActive:
+        staffText = fuelGauge.cell_percent_remaining.__str__() + "%"
+    else:
+        staffText = "N/A"
     update_element(staffText, staffElement, oled.width - 28, 0)
     # Update Chest battery
     chestText = "90%"
@@ -140,14 +152,14 @@ while True:
     if actionButton.value is False:
         print("Action Button pressed") # replace with log
         buttonLed.value = True
-        ledRing.fill((0, 255, 0))
+        ledRing.fill((255, 0, 0))
         ledRing.show()
         if audioSystem:
             takeImageSound.play()
         take_picture()
         messageText = "PICTURE TAKEN!"
         update_element(messageText, messageElement, 0, 16)
-        time.sleep(0.1)  # Debounce delay
+        time.sleep(0.25)  # Debounce delay
         buttonLed.value = False
         ledRing.fill((0, 0, 0))
         ledRing.show()
@@ -157,4 +169,4 @@ while True:
     
     oled.image(imageBuffer)
     oled.show()
-    time.sleep(1)
+    time.sleep(0.25)
