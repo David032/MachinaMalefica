@@ -140,7 +140,7 @@ while True:
     update_element(timestamp, timeElement, 0, 0)
     # Update Staff battery
     if fuelGauge:
-        staffText = fuelGauge.cell_percent_remaining.__str__() + "%"
+        staffText = fuelGauge.cell_percent.__str__() + "%"
     else:
         staffText = "N/A"
     update_element(staffText, staffElement, oled.width - 28, 0)
