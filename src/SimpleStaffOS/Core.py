@@ -14,6 +14,7 @@ import subprocess
 import os
 from pygame import mixer
 import adafruit_max1704x
+import requests
 
 #region Setup audio
 try:
@@ -145,7 +146,13 @@ while True:
         staffText = "N/A"
     update_element(staffText, staffElement, oled.width - 28, 0)
     # Update Chest battery
-    chestText = "90%"
+    try:
+        response = requests.get("http://10.42.0.114:5000/batteryLevel")
+        chest_battery = response.json().get("batteryLevel", "N/A")
+        chestText = str(chest_battery) + "%"
+    except:
+        chestText = "N/A"
+                                
     update_element(chestText, chestElement, (oled.width // 2) - 8, 0)
 
     # Check buttons
